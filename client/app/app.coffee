@@ -9,6 +9,9 @@ angular.module 'multiplayerHtml5PongApp', [
 ]
 .config ($routeProvider, $locationProvider) ->
   $routeProvider
+  .when '/game',
+    templateUrl: "/app/game/game.html"
+    controller: "GameCtrl"
   .otherwise
     redirectTo: '/'
 

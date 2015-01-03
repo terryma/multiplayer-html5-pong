@@ -1,6 +1,7 @@
 node_modules
 public
 .tmp
+.c9
 .sass-cache
 .idea
 client/bower_components
