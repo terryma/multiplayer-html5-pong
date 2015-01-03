@@ -44,6 +44,7 @@
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
+    <script src="/socket.io/socket.io.js"></script>
     <!-- build:js({client,node_modules}) app/vendor.js -->
       <!-- bower:js -->
       <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -54,6 +55,7 @@
       <script src="bower_components/angular-route/angular-route.js"></script>
       <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+      <script src="bower_components/angular-socket-io/socket.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
@@ -61,6 +63,7 @@
         <script src="app/app.js"></script>
           <!-- injector:js -->
           <script src="app/main/main.js"></script>
+          <script src="app/socket/socket.js"></script>
           <script src="components/modal/modal.js"></script>
           <script src="components/navbar/navbar.js"></script>
           <!-- endinjector -->

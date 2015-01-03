@@ -6,6 +6,7 @@ angular.module 'multiplayerHtml5PongApp', [
   'ngSanitize',
   'ngRoute',
   'ui.bootstrap'
+  'btford.socket-io'
 ]
 .config ($routeProvider, $locationProvider) ->
   $routeProvider
