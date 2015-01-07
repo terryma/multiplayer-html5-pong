@@ -15,7 +15,9 @@
     "angular-bootstrap": "~0.11.0",
     "font-awesome": ">=4.1.0",
     "lodash": "~2.4.1",
-    "angular-socket-io": "~0.7.0"
+    "angular-socket-io": "~0.7.0",
+    "threejs": "*",
+    "threex.keyboardstate": "*"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

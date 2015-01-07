@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'multiplayerHtml5PongApp'
-.controller 'MainCtrl', ($scope, $http, socket, $rootScope) ->
+.controller 'MainCtrl', ($scope, $http, socket, $rootScope, Game) ->
   $scope.awesomeThings = []
 
   $http.get('/api/things').success (awesomeThings) ->
@@ -13,4 +13,5 @@ angular.module 'multiplayerHtml5PongApp'
   $rootScope.$on 'socket:broadcast', (event, data) ->
     console.log('received broadcast', event.name, data)
 
-
+  game = new Game()
+  game.draw()
