@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'multiplayerHtml5PongApp'
-.controller 'MainCtrl', ($scope, $http, socket, $rootScope, Game) ->
+.controller 'MainCtrl', ($scope, $http, socket, $rootScope) ->
   $scope.awesomeThings = []
 
   $http.get('/api/things').success (awesomeThings) ->
