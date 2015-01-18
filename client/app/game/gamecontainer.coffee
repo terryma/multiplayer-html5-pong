@@ -5,32 +5,42 @@ angular.module 'multiplayerHtml5PongApp'
   # Start Game
   # Send Current State
   # Update View
-  $scope.PADDLE = 
-    W: 40
-    H: 120
-    D: 30
-  $scope.TABLE =
-    W: 640
-    H: 480
-    R: -240
-    L: 240
-    T: 320
-    B: -320
-  $scope.BALL =
-    VX: 3
-    VY: 3
-    R: 20
-  $scope.ball = 
-    X: 0
-    Y: 0
-  $scope.playerPaddle =
-    C: 0
-    
+  
   # Keyboard
   keyboard = new THREEx.KeyboardState()
-    
+  playerNumber = 1;
+
+  $scope.setupGame = (isLocal) ->
+    $scope.PADDLE = 
+      W: 40
+      H: 120
+      D: 30
+      M: 5
+    $scope.TABLE =
+      W: 640
+      H: 480
+      R: -240
+      L: 240
+      T: 320
+      B: -320
+    $scope.BALL =
+      VX: (if isLocal then 5 else -5)
+      VY: 5
+      R: 20
+    $scope.ball = 
+      X: 0
+      Y: 0
+    $scope.localPaddle =
+      C: 0
+    $scope.remotePaddle =
+      C: 0
+      
+    playerNumber = isLocal
+      
+    updateGameState()
+  
   updateGameState = ->
-    $timeout updateGameState, 10
+    $timeout updateGameState, 25
 
     # Move stuff around
     $scope.ball.X += $scope.BALL.VX
@@ -41,12 +51,19 @@ angular.module 'multiplayerHtml5PongApp'
       $scope.BALL.VY *= -1
 
     # Paddle
-    if keyboard.pressed('left')
-      $scope.playerPaddle.C += 5 if $scope.playerPaddle.C + $scope.PADDLE.H/2 < $scope.TABLE.L
-    if keyboard.pressed('right')
-      $scope.playerPaddle.C -= 5 if $scope.playerPaddle.C - $scope.PADDLE.H/2 > $scope.TABLE.R
-
-  updateGameState();
+    if (playerNumber == 0 and keyboard.pressed('left')) or (playerNumber == 1 and keyboard.pressed('a'))
+      $scope.localPaddle.C += -1 * $scope.PADDLE.M if $scope.localPaddle.C + $scope.PADDLE.H/2 < $scope.TABLE.L
+    if (playerNumber == 0 and keyboard.pressed('right')) or (playerNumber == 1 and keyboard.pressed('d'))
+      $scope.localPaddle.C -= $scope.PADDLE.M if $scope.localPaddle.C - $scope.PADDLE.H/2 > $scope.TABLE.R
+    
+    socket.emit('message', playerNumber, $scope.localPaddle.C);
+  
+  #Hook up to the SocketIO code
+  $rootScope.$on 'socket:broadcast', (event, data) ->
+    console.log('received broadcast', event.name, data)
+    if(data.source != playerNumber)
+      $scope.remotePaddle.C = data.payload;
+  
 .directive "gameContainer", ->
   restrict: "E"
   template: "<div class=\"container-fluid\" id=\"container\"></div>"
@@ -128,12 +145,23 @@ angular.module 'multiplayerHtml5PongApp'
           new THREE.BoxGeometry(@paddleW, @paddleH, @paddleD, 1, 1)
           new THREE.MeshLambertMaterial({ color: 0xFFFFFF })
         )
-        @paddle1.position.y = $scope.playerPaddle.C
+        @paddle1.position.y = $scope.localPaddle.C
         @paddle1.position.x = -@width/2 + @paddleW/2 + 5
         @paddle1.position.z = @paddleD/2
         @paddle1.castShadow = true
         @paddle1.receiveShadow = true
         @scene.add @paddle1
+        # Add player paddle
+        @paddle2 = new THREE.Mesh(
+          new THREE.BoxGeometry(@paddleW, @paddleH, @paddleD, 1, 1)
+          new THREE.MeshLambertMaterial({ color: 0xFFFFFF })
+        )
+        @paddle2.position.y = $scope.remotePaddle.C
+        @paddle2.position.x = +@width/2 - @paddleW/2 + 5
+        @paddle2.position.z = @paddleD/2
+        @paddle2.castShadow = true
+        @paddle2.receiveShadow = true
+        @scene.add @paddle2
   
         # Add ground
         @ground = new THREE.Mesh(
@@ -161,7 +189,8 @@ angular.module 'multiplayerHtml5PongApp'
         @ball.position.y = $scope.ball.Y
 
         # Paddle
-        @paddle1.position.y = $scope.playerPaddle.C
+        @paddle1.position.y = $scope.localPaddle.C
+        @paddle2.position.y = $scope.remotePaddle.C
 
         # Update Light / Camera
         @spotlight.position.x = @ball.position.x * 2

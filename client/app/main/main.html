@@ -1,6 +1,7 @@
 <!-- <div ng-include="'components/navbar/navbar.html'"></div> -->
 <div>
- <game-container ng-controller="GameContainerController"></game-container>
+ <game-container ng-controller="GameContainerController" ng-init="setupGame(0)"></game-container>
+ <game-container ng-controller="GameContainerController" ng-init="setupGame(1)"></game-container>
 </div>
 
 
