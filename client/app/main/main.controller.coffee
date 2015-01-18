@@ -13,5 +13,4 @@ angular.module 'multiplayerHtml5PongApp'
   $rootScope.$on 'socket:broadcast', (event, data) ->
     console.log('received broadcast', event.name, data)
 
-  game = new Game()
-  game.draw()
+
