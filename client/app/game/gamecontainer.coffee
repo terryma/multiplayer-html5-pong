@@ -52,7 +52,7 @@ angular.module 'multiplayerHtml5PongApp'
 
     # Paddle
     if (playerNumber == 0 and keyboard.pressed('left')) or (playerNumber == 1 and keyboard.pressed('a'))
-      $scope.localPaddle.C += -1 * $scope.PADDLE.M if $scope.localPaddle.C + $scope.PADDLE.H/2 < $scope.TABLE.L
+      $scope.localPaddle.C += $scope.PADDLE.M if $scope.localPaddle.C + $scope.PADDLE.H/2 < $scope.TABLE.L
     if (playerNumber == 0 and keyboard.pressed('right')) or (playerNumber == 1 and keyboard.pressed('d'))
       $scope.localPaddle.C -= $scope.PADDLE.M if $scope.localPaddle.C - $scope.PADDLE.H/2 > $scope.TABLE.R
     
